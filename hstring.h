@@ -27,3 +27,5 @@ void hstring_clear(HSTRING* hstring);
 void hstring_free(HSTRING* hstring);
 
 void hstring_print(HSTRING* hstring);
+
+void hstring_validity_assert(HSTRING* hstring, const char* messagem);
