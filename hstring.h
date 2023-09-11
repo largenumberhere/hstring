@@ -1,6 +1,16 @@
 #include <stddef.h>
 #define HSTRING_RESULT size_t;
 
+/*
+ * Single threaded only.
+ *
+ * The HSTRING or heap string type.
+ * It is always null terminated and length always refers to the length of characters stored excluding the null character
+ *
+ * capacity is the max length of contents, not including null terminator. Once this is reached, contents will be realloc'd.
+ * length is the current length of characters stored, not including null terminator.
+ * contents points to malloc'd heap space which is always null terminated.
+*/
 typedef struct{
     size_t capacity;
     size_t length;
