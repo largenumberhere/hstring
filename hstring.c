@@ -6,11 +6,9 @@
 #include <string.h>
 #include <stdbool.h>
 
-//PLATFORM SPECIFIC!!
-//#include <execinfo.h>
-
 void hstring_validity_assert(HSTRING* hstring, const char* message);
 
+//Print the struct with its contents
 void hstring_print(HSTRING* hstring){
     printf("HSTRING\n");
     printf("\tcapacity: %zu\n", hstring->capacity);
@@ -22,6 +20,7 @@ void hstring_print(HSTRING* hstring){
     printf("\"\n");
 }
 
+//Print the struct's technical information
 void hstring_debug(HSTRING* hstring){
     printf("HSTRING\n");
     printf("\tactual capacity: %zu\n", hstring->capacity+1);
@@ -31,7 +30,7 @@ void hstring_debug(HSTRING* hstring){
     printf("\"\n");
 }
 
-
+//Create a null terminated hstring
 HSTRING hstring_new() {
     HSTRING hstring;
 
@@ -78,6 +77,10 @@ void hstring_realloc(HSTRING* hstring){
     //printf("new size requested: %d\n", required_bytes);
 }
 
+/**
+ * Add a single character to the heapstring, extending its length and moving the null terminator. Extends the capacity if neccesary
+ * Prefer using hstring_push_string or hstring_push_string_raw to minimize reallocations
+**/
 void hstring_push_char(HSTRING* hstring, char item){
     //hstring_validity_assert(hstring);
     //printf("char '%c'\n", item);
@@ -105,8 +108,9 @@ int nearest_power_of_2(int number){
     return a;
 }
 
-
-
+/**
+ * Push a null terminated string. Use hstring_push_string_raw if your string may not be null terminated!
+*/
 void hstring_push_string(HSTRING* hstring, char* null_terminated_string){
     //hstring_validity_assert(hstring);
     //printf("bofore\n");
@@ -148,8 +152,11 @@ void hstring_push_string(HSTRING* hstring, char* null_terminated_string){
     //hstring_debug(hstring);
 }
 
-
-
+/*
+ * Add the non-null terimated string (or char array) to the string.
+ * Updates hstring's length and moves null terminator to the end of it. If neccesary reallocates to the full size immediately
+ * Copies every element into the hstring from 0 to (not including) unterminated_length.
+*/
 void hstring_push_string_raw(HSTRING* hstring, char* unterminated_string, int unterminated_length){
     //hstring_validity_assert(hstring);
     if(unterminated_length == 0){
@@ -203,15 +210,22 @@ void hstring_push_string_raw(HSTRING* hstring, char* unterminated_string, int un
 
     copy_start[unterminated_length] = '\0';
     hstring->length = hstring->length + (unterminated_length);
-
 }
 
+/*
+ * Does what it says on the tin...
+*/
 void hstring_read_stdin_char(HSTRING* hstring){
     char c = getc(stdin);
     hstring_push_char(hstring, c);
 }
 
+
 const size_t BUFFSIZE = 128;
+
+/*
+ * read a single line from stdin into a hstring. in up to BUFFSIZE bytes at a time (to avoid excessive re-allocation)
+*/
 void hstring_read_stdin_line(HSTRING* hstring){
     //hstring_validity_assert(hstring);
     //buffer is a char*
@@ -252,12 +266,18 @@ void hstring_read_stdin_line(HSTRING* hstring){
 
 }
 
+/*
+ * Does not deallocate the hstring, only sets the pointer and length to defaults
+*/
 void hstring_clear(HSTRING* hstring){
     hstring->length =0;
     hstring->contents[0] = '\0';
     return;
 }
 
+/*
+ * Free the hstring and set to defaults
+*/
 void hstring_free(HSTRING* hstring){
     assert(hstring->contents != NULL);
     free(hstring->contents);
@@ -278,7 +298,10 @@ void exit_with_stacktrace(){
     exit(-1);
 }
 
-void hstring_validity_assert(HSTRING* hstring, const char* message){
+/**
+ *  Check the struct for any flaws and exit if any are found to prevent memory corruption. Very useful for debugging!
+ */
+void hstring_validity_assert(HSTRING* hstring, const char* failure_message){
     if(hstring->contents == NULL){
         printf("hstring is null!\n");
         exit_with_stacktrace();
@@ -302,7 +325,7 @@ void hstring_validity_assert(HSTRING* hstring, const char* message){
             printf("Null character found before end of string at index %i!\n", i);
             printf("hstring length: %zu\n", hstring->length);
             printf("hstring capacity: %zu\n", hstring->capacity);
-            printf("%s\n", message);
+            printf("%s\n", failure_message);
             exit_with_stacktrace();
         }
     }
