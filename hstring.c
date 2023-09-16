@@ -5,8 +5,12 @@
 #include <math.h>
 #include <string.h>
 #include <stdbool.h>
+#include <errno.h>
+
+extern int errno;
 
 void hstring_validity_assert(HSTRING* hstring, const char* message);
+int atoi_e(char* string, size_t string_length);
 
 //Print the struct with its contents
 void hstring_print(HSTRING* hstring){
@@ -263,7 +267,15 @@ void hstring_read_stdin_line(HSTRING* hstring){
     // printf("\n");
     //printf("%zu", buff_index);
     hstring_push_string_raw(hstring, buff, buff_index);
+}
 
+//Read stdin, using this hstring as a buffer and convert it to an integer.
+//If the conversion fails, output is set to -1 or -2 and errno is set to 1 or 2
+//Does NOT clear the buffer for you. Its contents will be the line from stdin
+int hstring_get_int(HSTRING* hstring){
+    hstring_read_stdin_line(hstring);
+    int value = atoi_e(hstring->contents, hstring->length);
+    return value;
 }
 
 /*
@@ -331,4 +343,70 @@ void hstring_validity_assert(HSTRING* hstring, const char* failure_message){
     }
 
     return;
+}
+
+// Atoi that reports an error when it fails
+int atoi_e(char* string, size_t string_length){
+    if(string_length == 0){
+        errno = 2;
+        return -2;
+    }
+    int i = 0;
+    int mul = 1;
+    if(string[0] == '-'){
+        mul = -1;
+        i++;
+    }
+
+
+    int v = 0;
+    for(; i < string_length; i++){
+        char c = string[i];
+        if (c == '\0'){
+            v*=10;
+            continue;
+        }
+
+        if(c < '0' || c>  '9'){
+            //printf("'%c' is out of range\n", c);
+            errno = 1;
+            return -1;
+        }
+
+        v = v*10;
+        v += c - '0';
+    }
+
+    if (mul == -1){
+        v*=-1;
+    }
+
+    return v;
+}
+
+void atoi_e_test(){
+    assert(errno == 0);
+    int f = atoi_e("f",1);
+    assert(f == -1);
+    assert(errno == 1);
+    errno = 0;
+
+    assert(errno == 0);
+    char* string = "1234";
+    int string_len = strlen(string);
+    int num = atoi_e(string, string_len);
+    assert(num == 1234);
+    assert(errno == 0);
+
+    assert(errno==0);
+    //For some reason, c doesn't handle null characters at position 0 in a `char* string = ""` definiton
+    char string2a[3];
+    string2a[0] = '\0';
+    string2a[1] = '\0';
+    string2a[2] = '2';
+    char*string2 = string2a;
+    int string2_len = 3;
+    int num2 = atoi_e(string2, string2_len);
+    assert(num2 == 2);
+    assert(errno == 0);
 }

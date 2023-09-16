@@ -39,3 +39,5 @@ void hstring_free(HSTRING* hstring);
 void hstring_print(HSTRING* hstring);
 
 void hstring_validity_assert(HSTRING* hstring, const char* messagem);
+
+int hstring_get_int(HSTRING* hstring);

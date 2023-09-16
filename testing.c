@@ -3,8 +3,10 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
+#include <unistd.h>
 
-
+extern int errno;
 
 void push_char_and_push_string_test(){
     HSTRING hstring = hstring_new();
@@ -113,13 +115,51 @@ void clear_test()   {
     hstring_free(&hstring);
 }
 
+void get_int_test(){
+    HSTRING hstring = hstring_new();
+
+    //Positive numbers
+    int value = hstring_get_int(&hstring);
+    //printf("hstirg: '%s'\n",hstring.contents);
+    assert(value == 12345678); //As defined in testinput.txt, which is piped into this test program
+    assert(errno == 0);
+
+    //Non-numbers
+    hstring_clear(&hstring);
+    int invalid_value = hstring_get_int(&hstring);
+    //printf("hstring2: '%s\n'", hstring.contents);
+    assert(invalid_value == -1);
+    assert(errno = 1);
+
+    //Negative numbers
+    errno = 0;
+    hstring_clear(&hstring);
+    int value2 = hstring_get_int(&hstring);
+    //printf("%i\n", value2);
+    assert(value2==-200);
+    assert(errno==0);
+
+    hstring_validity_assert(&hstring, "get_int corruped hstring!");
+    hstring_free(&hstring);
+}
+
+
+
 int main(){
     validity_assert_test();
     push_string_raw_test();
     push_char_and_push_string_test();
     //stdin_test();
     clear_test();
+    //atoi_e_test();
+    get_int_test();
 }
+
+
+
+
+
+
 
 
 
