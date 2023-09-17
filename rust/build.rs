@@ -1,35 +1,42 @@
 use std::env;
 use std::path::PathBuf;
 
+// Runs just before compilation. Any stdout from this is piped into rustc's args
 fn main() {
-    // Tell cargo to look for shared libraries in the specified directory
-    println!("cargo:rustc-link-search=/workspaces/hstring");
-    // Tell cargo to tell rustc to link the system bzip2
-    // shared library.
-    //println!("cargo:rustc-link-lib=hstring.o");
-    //println!("carg:rustc-link-lib=hstring.o");
-    // Tell cargo to invalidate the built crate whenever the wrapper changes
-    //println!("cargo:rerun-if-changed=wrapper.h");
+    //Compile the hstring code into a hstring.a and hstring.o library file and place it into `OUT_DIR`
+    cc::Build::new()
+        .file("/workspaces/hstring/hstring.c")
+        .compile("hstring");
+
+    println!("cargo:rerun-if-changed=/workspaces/hstring/hstring.h");
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let bindings = bindgen::Builder::default()
-        // The input header we would like to generate
-        // bindings for.
         .header("/workspaces/hstring/hstring.h")
-        .clang_arg("-F/workspaces/hstring")
+
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+
+        // Use the c type aliaes from this package
+        .ctypes_prefix("cty")
+
+        // Use the bare bones rust core library which is availible anywhere
+        .use_core()
+
         // Finish the builder and generate the bindings.
         .generate()
+
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings");
 
     // Write the bindings to the $OUT_DIR/bindings.rs file.
-    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+    let out_dir = env::var("OUT_DIR").unwrap();
+    let out_path = PathBuf::from(&out_dir);
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
-    println!("Complete!");
+    println!("cargo:warning=Bindings output to: {}/bindings.rs", out_dir);
+    //println!("Complete!");
 }

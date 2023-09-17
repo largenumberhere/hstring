@@ -2,12 +2,7 @@
 /testing
 /hstring.o
 
-#valgrind's garbage
-/vgcore.53497
-/vgcore.88619
-/vgcore.91125
-/vgcore.91125
-/vgcore.91779
-/vgcore.92149
-/vgcore.92320
-/vgcore.91609
+# Rust bindings's junk
+/rust/target/
+/rust/Cargo.lock
+/rust2

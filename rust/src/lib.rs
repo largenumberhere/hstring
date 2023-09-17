@@ -13,9 +13,8 @@ mod tests{
     fn creation(){
         unsafe{
             let mut hstring = hstring_new();
-            hstring_print(&mut hstring);
-
-
+            //hstring_print(&mut hstring);
+            let output = format!("{:?}", &hstring);
         }
 
     }
