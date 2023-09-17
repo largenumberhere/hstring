@@ -9,7 +9,7 @@ fn main() {
         .file("hstring.c")
         .compile("hstring");
 
-    println!("cargo:rerun-if-changed=/workspaces/hstring/hstring.h");
+    println!("cargo:rerun-if-changed=hstring.h");
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
@@ -38,6 +38,6 @@ fn main() {
     bindings
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
-    println!("cargo:warning=Bindings output to: {}/bindings.rs", out_dir);
+    //println!("cargo:warning=Bindings output to: {}/bindings.rs", out_dir);
     //println!("Complete!");
 }
