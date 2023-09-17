@@ -7,10 +7,16 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 #[cfg(test)]
 mod tests{
     use crate::hstring_new;
+    use crate::hstring_print;
 
     #[test]
     fn creation(){
-        let hstring  = unsafe{ hstring_new() };
-        println!("{:p}",hstring.contents);
+        unsafe{
+            let mut hstring = hstring_new();
+            hstring_print(&mut hstring);
+
+
+        }
+
     }
 }
