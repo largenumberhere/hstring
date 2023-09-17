@@ -19,6 +19,7 @@ fn main() {
         // The input header we would like to generate
         // bindings for.
         .header("/workspaces/hstring/hstring.h")
+        .clang_arg("-I/workspaces/hstring")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
