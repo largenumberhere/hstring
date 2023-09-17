@@ -139,6 +139,13 @@ void get_int_test(){
     assert(value2==-200);
     assert(errno==0);
 
+    hstring_clear(&hstring);
+    int value3 = hstring_get_int(&hstring);
+    assert(value3 ==200);
+    assert(errno==0);
+    hstring_clear(&hstring);
+
+
     hstring_validity_assert(&hstring, "get_int corruped hstring!");
     hstring_free(&hstring);
 }

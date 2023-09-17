@@ -358,6 +358,11 @@ int atoi_e(char* string, size_t string_length){
         i++;
     }
 
+    if(string[0] == '+'){
+        mul = 1;
+        i++;
+    }
+
 
     int v = 0;
     for(; i < string_length; i++){

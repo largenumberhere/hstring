@@ -1,9 +1,9 @@
+# Sanitizer libraries install: sudo apt update && sudo apt upgrade && sudo apt install llvm-14
 test:
 	clear
-	clang -std=c11 -gdwarf-4 -ggdb3 -Wall -Werror -Wextra -Wno-gnu-folding-constant -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wshadow -c -o hstring.o hstring.c
-	clang -std=c11 -gdwarf-4 -ggdb3 -Wall -Werror -Wextra -Wno-gnu-folding-constant -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wshadow -o testing testing.c hstring.o
-	#valgrind ./testing
-	#rm -v vgcore.*
-	cat testinput.txt | ./testing
+	# Compile hstring.c and main.c with full warnigs, debug information and adress santizier.
+	ASAN_SYMBOLIZER_PATH="/usr/lib/llvm-14/llvm-symbolizer" clang -std=c11 -gdwarf-4 -ggdb3 -Wall -Werror -Wextra -Wno-gnu-folding-constant -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wshadow -c -o hstring.o -fsanitize=address -g -fno-omit-frame-pointer hstring.c
+	ASAN_SYMBOLIZER_PATH="/usr/lib/llvm-14/llvm-symbolizer" clang -std=c11 -gdwarf-4 -ggdb3 -Wall -Werror -Wextra -Wno-gnu-folding-constant -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wshadow -o testing testing.c -fsanitize=address -g -fno-omit-frame-pointer hstring.o
 
-	#todo: learn to use builtin -fsanitize=address for clang
+	# Run test file with stdin from testinginput.txt
+	cat testinput.txt | ./testing
