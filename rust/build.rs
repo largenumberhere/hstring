@@ -11,7 +11,7 @@ fn main() {
     //println!("carg:rustc-link-lib=hstring.o");
     // Tell cargo to invalidate the built crate whenever the wrapper changes
     println!("cargo:rerun-if-changed=wrapper.h");
-    println!("cargo:rustc")
+    //println!("cargo:rustc")
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
