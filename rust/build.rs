@@ -8,18 +8,17 @@ fn main() {
     // Tell cargo to tell rustc to link the system bzip2
     // shared library.
     //println!("cargo:rustc-link-lib=hstring.o");
-    println!("carg:rustc-link-lib=hstring.o")
+    //println!("carg:rustc-link-lib=hstring.o");
     // Tell cargo to invalidate the built crate whenever the wrapper changes
     println!("cargo:rerun-if-changed=wrapper.h");
-
+    println!("cargo:rustc")
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let bindings = bindgen::Builder::default()
-
         // The input header we would like to generate
         // bindings for.
-        .header("wrapper.h")
+        .header("/workspaces/hstring/hstring.h")
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
