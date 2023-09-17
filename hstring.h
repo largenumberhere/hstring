@@ -1,4 +1,7 @@
+#ifndef HSTRING_H
+
 #include <stddef.h>
+
 #define HSTRING_RESULT size_t;
 
 /*
@@ -41,3 +44,4 @@ void hstring_print(HSTRING* hstring);
 void hstring_validity_assert(HSTRING* hstring, const char* messagem);
 
 int hstring_get_int(HSTRING* hstring);
+#endif

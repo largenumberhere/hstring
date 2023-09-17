@@ -1,1 +1,1 @@
-#include "/workspaces/hstring/hstring.c"
+#include "/workspaces/hstring/hstring.h"
