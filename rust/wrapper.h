@@ -1,1 +1,1 @@
-#include "../hstring.h"
+#include "hstring.h"
