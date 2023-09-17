@@ -225,19 +225,19 @@ void hstring_read_stdin_char(HSTRING* hstring){
 }
 
 
-const size_t BUFFSIZE = 128;
 
+const size_t HSTRING_STDIN_BUFFSIZE = 128;
 /*
  * read a single line from stdin into a hstring. in up to BUFFSIZE bytes at a time (to avoid excessive re-allocation)
 */
 void hstring_read_stdin_line(HSTRING* hstring){
     //hstring_validity_assert(hstring);
     //buffer is a char*
-    char buff[BUFFSIZE];
+    char buff[HSTRING_STDIN_BUFFSIZE];
     size_t buff_index = 0;
     while(true){
         //buffer is at max size
-        if(buff_index > BUFFSIZE -1) {
+        if(buff_index > HSTRING_STDIN_BUFFSIZE -1) {
             //copy to string
             //printf("emptying buff\n");
 

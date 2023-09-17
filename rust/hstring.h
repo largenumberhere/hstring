@@ -1,5 +1,5 @@
 #ifndef HSTRING_H
-
+#define HSTRING_H
 #include <stddef.h>
 
 #define HSTRING_RESULT size_t;
@@ -32,6 +32,9 @@ void hstring_push_string(HSTRING* hstring, char* null_terminated_string);
 void hstring_push_string_raw(HSTRING* hstring, char* unterminated_string, int string_length_excluding_terminator);
 
 void hstring_read_stdin_char(HSTRING* hstring);
+
+
+extern const size_t HSTRING_STDIN_BUFFSIZE;
 
 void hstring_read_stdin_line(HSTRING* hstring);
 
