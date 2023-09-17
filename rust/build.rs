@@ -3,9 +3,10 @@ use std::path::PathBuf;
 
 // Runs just before compilation. Any stdout from this is piped into rustc's args
 fn main() {
+
     //Compile the hstring code into a hstring.a and hstring.o library file and place it into `OUT_DIR`
     cc::Build::new()
-        .file("/workspaces/hstring/hstring.c")
+        .file("hstring.c")
         .compile("hstring");
 
     println!("cargo:rerun-if-changed=/workspaces/hstring/hstring.h");
