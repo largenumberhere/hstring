@@ -33,9 +33,6 @@ void hstring_push_string_raw(HSTRING* hstring, char* unterminated_string, int st
 
 void hstring_read_stdin_char(HSTRING* hstring);
 
-
-extern const size_t HSTRING_STDIN_BUFFSIZE;
-
 void hstring_read_stdin_line(HSTRING* hstring);
 
 void hstring_clear(HSTRING* hstring);

@@ -226,11 +226,12 @@ void hstring_read_stdin_char(HSTRING* hstring){
 
 
 
-const size_t HSTRING_STDIN_BUFFSIZE = 128;
 /*
  * read a single line from stdin into a hstring. in up to BUFFSIZE bytes at a time (to avoid excessive re-allocation)
 */
 void hstring_read_stdin_line(HSTRING* hstring){
+    const size_t HSTRING_STDIN_BUFFSIZE = 128;
+
     //hstring_validity_assert(hstring);
     //buffer is a char*
     char buff[HSTRING_STDIN_BUFFSIZE];
