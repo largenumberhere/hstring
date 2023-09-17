@@ -14,7 +14,7 @@ fn main() {
     // to bindgen, and lets you build up options for
     // the resulting bindings.
     let bindings = bindgen::Builder::default()
-        .header("/workspaces/hstring/hstring.h")
+        .header("hstring.h")
 
         // Tell cargo to invalidate the built crate whenever any of the
         // included header files changed.
